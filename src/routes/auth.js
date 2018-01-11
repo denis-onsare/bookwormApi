@@ -1,8 +1,19 @@
 import express from 'express';
+import User from '../models/User';
+import { toASCII } from 'punycode';
 
-const routes = express.Router();
+const router = express.Router();
 
-routes.get('/', (req, res) => 
-    res.status(400).json({error:{"message": "Invalid credentials"}}));
+router.post('/', (req, res) => {
+    const {credentials} = req.body;
+    console.log(credentials);
+    User.findOne({email: credentials.email}).then(user => {
+        if (user && user.isValidPassword(credentials.password)) {
+            res.json({user: user.toAuthJSON()});
+        } else {
+            res.status(400).json({errors:{message: "Invalid credentials"}})
+        }
+    })
+});
 
-export default routes;
+export default router;

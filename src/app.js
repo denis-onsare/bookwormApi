@@ -6,6 +6,7 @@ import Promise from 'bluebird';
 import dotenv from 'dotenv';
 
 import auth from './routes/auth';
+import user from './routes/user';
 
 dotenv.config();
 mongoose.Promise = Promise;
@@ -15,6 +16,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use('/api/auth', auth);
+app.use('/api/user', user);
 
 app.get('/*', (req, res) => 
     res.sendFile(path.join(__dirname, "index.html")));

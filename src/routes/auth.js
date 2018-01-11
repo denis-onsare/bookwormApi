@@ -1,6 +1,5 @@
 import express from 'express';
 import User from '../models/User';
-import { toASCII } from 'punycode';
 
 const router = express.Router();
 

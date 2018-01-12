@@ -12,8 +12,8 @@ function setup() {
 }
 
 export function sendConfirmationEmail(user) {
-    const transport = setup();
-    const mail = {
+    let transport = setup();
+    const mailOptions = {
         from: '"Bookworm" <info@bookworm.com>',
         to: user.email,
         subject: "Please confirm your email",
@@ -22,6 +22,5 @@ export function sendConfirmationEmail(user) {
         ${user.generateConfirmationUrl()}
         `
     }
-}
-
-transport.sendMail(email);
+    transport.sendMail(emailOptions);
+};

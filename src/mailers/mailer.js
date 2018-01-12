@@ -22,5 +22,5 @@ export function sendConfirmationEmail(user) {
         ${user.generateConfirmationUrl()}
         `
     }
-    transport.sendMail(emailOptions);
+    transport.sendMail(mailOptions);
 };

@@ -18,6 +18,10 @@ const schema = mongoose.Schema({
     confirmed: {
         type: Boolean,
         default: false
+    },
+    confirmationToken: {
+        type: String,
+        default: ''
     }
 },{timestamps: true});
 
@@ -32,6 +36,14 @@ schema.methods.generateJWT = function generateJWT() {
     return jwt.sign ({
         email: this.email
     }, process.env.SECRET_KEY);
+}
+
+schema.methods.setConfirmationToken = function setConfirmationToken() {
+   this.confirmationToken = generateJWT();
+}
+
+schema.methods.generateConfirmationUrl = function generateConfirmationUrl() {
+   return `${process.env.HOST}/confirmation/${this.confirmationToken}`
 }
 
 schema.methods.toAuthJSON = function toAuthJSON() {

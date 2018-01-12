@@ -39,11 +39,11 @@ schema.methods.generateJWT = function generateJWT() {
 }
 
 schema.methods.setConfirmationToken = function setConfirmationToken() {
-   this.confirmationToken = generateJWT();
+   this.confirmationToken = this.generateJWT();
 }
 
 schema.methods.generateConfirmationUrl = function generateConfirmationUrl() {
-   return `${process.env.HOST}/confirmation/${this.confirmationToken}`
+   return `${process.env.HOST}/confirmation/${this.confirmationToken}`;
 }
 
 schema.methods.toAuthJSON = function toAuthJSON() {

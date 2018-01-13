@@ -1,6 +1,7 @@
 import express from 'express';
 import User from '../models/User';
 import { sendResetPasswordRequestEmail } from '../mailers/mailer';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -34,6 +35,34 @@ router.post('/reset_password_request', (req, res) => {
             res.json({});
         } else {
             res.status(404).json({errors:{message: "User not found!!"}});
+        }
+    })
+});
+
+router.post('/validate_token', (req, res) => {
+    jwt.verify(req.body.token, process.env.SECRET_KEY, err => {
+        if (err) {
+            res.status(401).json({});
+        } else {
+            res.json({});
+        }
+    })
+});
+
+router.post('/reset_password', (req, res) => {
+    const { password, token } = req.body.data;
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+        if (err) {
+            res.status(401).json({errors:{message: "Invalid token"}});
+        } else {
+            User.findOne({_id: decoded._id}).then(user => {
+                if (user) {
+                    user.setPassword(password);
+                    user.save().then(() => res.json({}));
+                } else {
+                    res.status(404).json({errors:{message: "Invalid token"}});
+                }
+            })
         }
     })
 });
